@@ -21,7 +21,11 @@ export class App extends Component {
     const { query, currentPage } = this.state;
     try {
       if (prevState.query !== query) {
-        this.setState({ currentPage: 1, isLoading: true });
+        this.setState({
+          currentPage: 1,
+          imagesQuantity: 0,
+          isLoading: true,
+        });
 
         const { hits, totalHits } = await fetchImages(query, currentPage);
 
@@ -36,7 +40,7 @@ export class App extends Component {
         }
       }
 
-      if (prevState.currentPage !== this.state.currentPage) {
+      if (prevState.currentPage !== currentPage && currentPage !== 1) {
         const { hits } = await fetchImages(query, currentPage);
 
         this.setState(prevState => ({
@@ -61,7 +65,7 @@ export class App extends Component {
   };
 
   onSubmit = ({ search }, { resetForm }) => {
-    this.setState({ query: search });
+    this.setState({ query: search, currentPage: 1 });
     resetForm();
   };
 
